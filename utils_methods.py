@@ -71,10 +71,10 @@ def train_FedAvg(data_obj, act_prob ,learning_rate, batch_size, epoch, com_amoun
                 inc_seed += 1
                 if len(selected_clnts) != 0:
                     break
-            print('Selected Clients: %s' %(', '.join(['%2d' %item for item in selected_clnts])))
+            write_log('Selected Clients: %s' %(', '.join(['%2d' %item for item in selected_clnts])))
 
             for clnt in selected_clnts:
-                print('---- Training client %d' %clnt)
+                write_log('---- Training client %d' %clnt)
                 trn_x = clnt_x[clnt]
                 trn_y = clnt_y[clnt]
 
@@ -94,19 +94,19 @@ def train_FedAvg(data_obj, act_prob ,learning_rate, batch_size, epoch, com_amoun
             ###
             loss_tst, acc_tst = get_acc_loss(data_obj.tst_x, data_obj.tst_y, avg_model, data_obj.dataset)
             tst_perf_sel[i] = [loss_tst, acc_tst]
-            print("**** Communication sel %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication sel %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
             ###
             loss_tst, acc_tst = get_acc_loss(cent_x, cent_y, avg_model, data_obj.dataset)
             trn_perf_sel[i] = [loss_tst, acc_tst]
-            print("**** Communication sel %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication sel %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
             ###
             loss_tst, acc_tst = get_acc_loss(data_obj.tst_x, data_obj.tst_y, all_model, data_obj.dataset)
             tst_perf_all[i] = [loss_tst, acc_tst]
-            print("**** Communication all %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication all %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
             ###
             loss_tst, acc_tst = get_acc_loss(cent_x, cent_y, all_model, data_obj.dataset)
             trn_perf_all[i] = [loss_tst, acc_tst]
-            print("**** Communication all %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication all %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
 
             if ((i+1) % save_period == 0):
                 torch.save(avg_model.state_dict(), 'Output/%s/%s/%d_com_sel.pt' %(data_obj.name, method_name, (i+1))) 
@@ -206,13 +206,13 @@ def train_SCAFFOLD(data_obj, act_prob, learning_rate, batch_size, n_minibatch, c
                 inc_seed += 1
                 if len(selected_clnts) != 0:
                     break
-            print('Selected Clients: %s' %(', '.join(['%2d' %item for item in selected_clnts])))
+            write_log('Selected Clients: %s' %(', '.join(['%2d' %item for item in selected_clnts])))
 
             delta_c_sum = np.zeros(n_par)
             prev_params = get_mdl_params([avg_model], n_par)[0]
 
             for clnt in selected_clnts:
-                print('---- Training client %d' %clnt)
+                write_log('---- Training client %d' %clnt)
                 trn_x = clnt_x[clnt]
                 trn_y = clnt_y[clnt]
 
@@ -241,19 +241,19 @@ def train_SCAFFOLD(data_obj, act_prob, learning_rate, batch_size, n_minibatch, c
             ###
             loss_tst, acc_tst = get_acc_loss(data_obj.tst_x, data_obj.tst_y, avg_model, data_obj.dataset)
             tst_perf_sel[i] = [loss_tst, acc_tst]
-            print("**** Communication sel %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication sel %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
             ###
             loss_tst, acc_tst = get_acc_loss(cent_x, cent_y, avg_model, data_obj.dataset)
             trn_perf_sel[i] = [loss_tst, acc_tst]
-            print("**** Communication sel %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication sel %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
             ###
             loss_tst, acc_tst = get_acc_loss(data_obj.tst_x, data_obj.tst_y, all_model, data_obj.dataset)
             tst_perf_all[i] = [loss_tst, acc_tst]
-            print("**** Communication all %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication all %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
             ###
             loss_tst, acc_tst = get_acc_loss(cent_x, cent_y, all_model, data_obj.dataset)
             trn_perf_all[i] = [loss_tst, acc_tst]
-            print("**** Communication all %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication all %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
 
             if ((i+1) % save_period == 0):
                 torch.save(avg_model.state_dict(), 'Output/%s/%s/%d_com_sel.pt' %(data_obj.name, method_name, (i+1)))     
@@ -367,12 +367,12 @@ def train_FedDyn(data_obj, act_prob, learning_rate, batch_size, epoch, com_amoun
                 inc_seed += 1
                 if len(selected_clnts) != 0:
                     break
-            print('Selected Clients: %s' %(', '.join(['%2d' %item for item in selected_clnts])))
+            write_log('Selected Clients: %s' %(', '.join(['%2d' %item for item in selected_clnts])))
             cld_mdl_param_tensor = torch.tensor(cld_mdl_param, dtype=torch.float32, device=device)
 
             for clnt in selected_clnts:
                 # Train locally 
-                print('---- Training client %d' %clnt)
+                write_log('---- Training client %d' %clnt)
                 trn_x = clnt_x[clnt]
                 trn_y = clnt_y[clnt]
 
@@ -403,19 +403,19 @@ def train_FedDyn(data_obj, act_prob, learning_rate, batch_size, epoch, com_amoun
             ###
             loss_tst, acc_tst = get_acc_loss(data_obj.tst_x, data_obj.tst_y, avg_model, data_obj.dataset)
             tst_perf_sel[i] = [loss_tst, acc_tst]
-            print("**** Communication sel %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication sel %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
             ###
             loss_tst, acc_tst = get_acc_loss(cent_x, cent_y, avg_model, data_obj.dataset)
             trn_perf_sel[i] = [loss_tst, acc_tst]
-            print("**** Communication sel %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication sel %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
             ###
             loss_tst, acc_tst = get_acc_loss(data_obj.tst_x, data_obj.tst_y, all_model, data_obj.dataset)
             tst_perf_all[i] = [loss_tst, acc_tst]
-            print("**** Communication all %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication all %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
             ###
             loss_tst, acc_tst = get_acc_loss(cent_x, cent_y, all_model, data_obj.dataset)
             trn_perf_all[i] = [loss_tst, acc_tst]
-            print("**** Communication all %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication all %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
 
             if ((i+1) % save_period == 0):
                 torch.save(avg_model.state_dict(), 'Output/%s/%s/%d_com_sel.pt' %(data_obj.name, method_name, (i+1)))
@@ -518,12 +518,12 @@ def train_FedProx(data_obj, act_prob ,learning_rate, batch_size, epoch, com_amou
                 inc_seed += 1
                 if len(selected_clnts) != 0:
                     break
-            print('Selected Clients: %s' %(', '.join(['%2d' %item for item in selected_clnts])))
+            write_log('Selected Clients: %s' %(', '.join(['%2d' %item for item in selected_clnts])))
             avg_model_param = get_mdl_params([avg_model], n_par)[0]
             avg_model_param_tensor = torch.tensor(avg_model_param, dtype=torch.float32, device=device)
 
             for clnt in selected_clnts:
-                print('---- Training client %d' %clnt)
+                write_log('---- Training client %d' %clnt)
                 trn_x = clnt_x[clnt]
                 trn_y = clnt_y[clnt]
                 clnt_models[clnt] = model_func().to(device)
@@ -540,19 +540,19 @@ def train_FedProx(data_obj, act_prob ,learning_rate, batch_size, epoch, com_amou
             ###
             loss_tst, acc_tst = get_acc_loss(data_obj.tst_x, data_obj.tst_y, avg_model, data_obj.dataset)
             tst_perf_sel[i] = [loss_tst, acc_tst]
-            print("**** Communication sel %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication sel %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
             ###
             loss_tst, acc_tst = get_acc_loss(cent_x, cent_y, avg_model, data_obj.dataset)
             trn_perf_sel[i] = [loss_tst, acc_tst]
-            print("**** Communication sel %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication sel %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
             ###
             loss_tst, acc_tst = get_acc_loss(data_obj.tst_x, data_obj.tst_y, all_model, data_obj.dataset)
             tst_perf_all[i] = [loss_tst, acc_tst]
-            print("**** Communication all %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication all %3d, Test Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
             ###
             loss_tst, acc_tst = get_acc_loss(cent_x, cent_y, all_model, data_obj.dataset)
             trn_perf_all[i] = [loss_tst, acc_tst]
-            print("**** Communication all %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
+            write_log("**** Communication all %3d, Cent Accuracy: %.4f, Loss: %.4f" %(i+1, acc_tst, loss_tst))
 
             if ((i+1) % save_period == 0):
                 torch.save(avg_model.state_dict(), 'Output/%s/%s/%d_com_sel.pt' %(data_obj.name, method_name, (i+1)))     

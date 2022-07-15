@@ -42,7 +42,7 @@ class DatasetObject:
                 self.channels = 3; self.width = 32; self.height = 32; self.n_cls = 10;
                 
             if self.dataset == 'CIFAR100':
-                print(self.dataset)
+                write_log(self.dataset)
                 # mean and std are validated here: https://gist.github.com/weiaicunzai/e623931921efefd4c331622c344d8151
                 transform = transforms.Compose([transforms.ToTensor(),
                                                 transforms.Normalize(mean=[0.5071, 0.4867, 0.4408], 
@@ -149,7 +149,7 @@ class DatasetObject:
                 while(np.sum(clnt_data_list)!=0):
                     curr_clnt = np.random.randint(self.n_client)
                     # If current node is full resample a client
-                    print('Remaining Data: %d' %np.sum(clnt_data_list))
+                    write_log('Remaining Data: %d' %np.sum(clnt_data_list))
                     if clnt_data_list[curr_clnt] <= 0:
                         continue
                     clnt_data_list[curr_clnt] -= 1
@@ -173,8 +173,8 @@ class DatasetObject:
                     for cls in range(self.n_cls):
                         cls_means[clnt,cls] = np.mean(clnt_y[clnt]==cls)
                 prior_real_diff = np.abs(cls_means-cls_priors)
-                print('--- Max deviation from prior: %.4f' %np.max(prior_real_diff))
-                print('--- Min deviation from prior: %.4f' %np.min(prior_real_diff))
+                write_log('--- Max deviation from prior: %.4f' %np.max(prior_real_diff))
+                write_log('--- Min deviation from prior: %.4f' %np.min(prior_real_diff))
             
             elif self.rule == 'iid' and self.dataset == 'CIFAR100' and self.unbalanced_sgm==0:
                 assert len(trn_y)//100 % self.n_client == 0 
@@ -223,7 +223,7 @@ class DatasetObject:
             np.save('%s/%s/tst_y.npy'  %(self.data_path, self.name),  tst_y)
 
         else:
-            print("Data is already downloaded in the folder.")
+            write_log("Data is already downloaded in the folder.")
             self.clnt_x = np.load('%s/%s/clnt_x.npy' %(self.data_path, self.name), allow_pickle=True)
             self.clnt_y = np.load('%s/%s/clnt_y.npy' %(self.data_path, self.name), allow_pickle=True)
             self.n_client = len(self.clnt_x)
@@ -242,19 +242,19 @@ class DatasetObject:
             if self.dataset == 'emnist':
                 self.channels = 1; self.width = 28; self.height = 28; self.n_cls = 10;
                 
-        print('Class frequencies:')
+        write_log('Class frequencies:')
         count = 0
         for clnt in range(self.n_client):
-            print("Client %3d: " %clnt + 
+            write_log("Client %3d: " %clnt + 
                   ', '.join(["%.3f" %np.mean(self.clnt_y[clnt]==cls) for cls in range(self.n_cls)]) + 
                   ', Amount:%d' %self.clnt_y[clnt].shape[0])
             count += self.clnt_y[clnt].shape[0]
         
         
-        print('Total Amount:%d' %count)
-        print('--------')
+        write_log('Total Amount:%d' %count)
+        write_log('--------')
 
-        print("      Test: " + 
+        write_log("      Test: " + 
               ', '.join(["%.3f" %np.mean(self.tst_y==cls) for cls in range(self.n_cls)]) + 
               ', Amount:%d' %self.tst_y.shape[0])
         
@@ -270,9 +270,9 @@ def generate_syn_logistic(dimension, n_clnt, n_cls, avg_data=4, alpha=1.0, beta=
     cov_x = np.diag(diagonal)
     
     samples_per_user = (np.random.lognormal(mean=np.log(avg_data + 1e-3), sigma=theta, size=n_clnt)).astype(int)
-    print('samples per user')
-    print(samples_per_user)
-    print('sum %d' %np.sum(samples_per_user))
+    write_log('samples per user')
+    write_log(samples_per_user)
+    write_log('sum %d' %np.sum(samples_per_user))
     
     num_samples = np.sum(samples_per_user)
 
@@ -317,7 +317,7 @@ class DatasetSynthetic:
         data_path = 'Data'
         if (not os.path.exists('%s/%s/' %(data_path, self.name))):
             # Generate data
-            print('Sythetize')
+            write_log('Sythetize')
             data_x, data_y = generate_syn_logistic(dimension=n_dim, n_clnt=n_clnt, n_cls=n_cls, avg_data=avg_data, 
                                         alpha=alpha, beta=beta, theta=theta, 
                                         iid_sol=iid_sol, iid_dat=iid_data)
@@ -326,12 +326,12 @@ class DatasetSynthetic:
             np.save('%s/%s/data_y.npy' %(data_path, self.name), data_y)
         else:
             # Load data
-            print('Load')
+            write_log('Load')
             data_x = np.load('%s/%s/data_x.npy' %(data_path, self.name), allow_pickle=True)
             data_y = np.load('%s/%s/data_y.npy' %(data_path, self.name), allow_pickle=True)
 
         for clnt in range(n_clnt):
-            print(', '.join(['%.4f' %np.mean(data_y[clnt]==t) for t in range(n_cls)]))
+            write_log(', '.join(['%.4f' %np.mean(data_y[clnt]==t) for t in range(n_cls)]))
 
         self.clnt_x = data_x
         self.clnt_y = data_y
@@ -339,7 +339,7 @@ class DatasetSynthetic:
         self.tst_x = np.concatenate(self.clnt_x, axis=0)
         self.tst_y = np.concatenate(self.clnt_y, axis=0)
         self.n_client = len(data_x)
-        print(self.clnt_x.shape)
+        write_log(self.clnt_x.shape)
 
 # Original prepration is from LEAF paper...
 # This loads Shakespeare dataset only.

@@ -1,6 +1,6 @@
 from utils_general import *
 from utils_methods import *
-
+from utils import write_log
 # Dataset initialization
 
 ########
@@ -51,7 +51,7 @@ init_model = model_func()
 # Initalise the model for all methods or load it from a saved initial model
 init_model = model_func()
 if not os.path.exists('Output/%s/%s_init_mdl.pt' %(data_obj.name, model_name)):
-    print("New directory!")
+    write_log("New directory!")
     os.mkdir('Output/%s/' %(data_obj.name))
     torch.save(init_model.state_dict(), 'Output/%s/%s_init_mdl.pt' %(data_obj.name, model_name))
 else:
@@ -60,7 +60,7 @@ else:
     
 # Methods    
 ####
-print('FedDyn')
+write_log('FedDyn')
 
 alpha_coef = 1e-2
 [fed_mdls_sel_FedFyn, trn_perf_sel_FedFyn, tst_perf_sel_FedFyn,
@@ -71,7 +71,7 @@ fed_mdls_cld_FedFyn] = train_FedDyn(data_obj=data_obj, act_prob=act_prob, learni
                                     save_period=save_period, lr_decay_per_round=lr_decay_per_round)
 
 # ###
-# print('SCAFFOLD')
+# write_log('SCAFFOLD')
 # n_data_per_client = np.concatenate(data_obj.clnt_x, axis=0).shape[0] / n_client
 # n_iter_per_epoch  = np.ceil(n_data_per_client/batch_size)
 # n_minibatch = (epoch*n_iter_per_epoch).astype(np.int64)
@@ -85,7 +85,7 @@ fed_mdls_cld_FedFyn] = train_FedDyn(data_obj=data_obj, act_prob=act_prob, learni
 #                                         init_model=init_model, save_period=save_period, lr_decay_per_round=lr_decay_per_round)
     
 # ####
-# print('FedAvg')
+# write_log('FedAvg')
 
 # [fed_mdls_sel_FedAvg, trn_perf_sel_FedAvg, tst_perf_sel_FedAvg,
 # fed_mdls_all_FedAvg, trn_perf_all_FedAvg,
@@ -95,7 +95,7 @@ fed_mdls_cld_FedFyn] = train_FedDyn(data_obj=data_obj, act_prob=act_prob, learni
 #                                     lr_decay_per_round=lr_decay_per_round)
         
 # #### 
-# print('FedProx')
+# write_log('FedProx')
 
 # mu = 1e-4
 

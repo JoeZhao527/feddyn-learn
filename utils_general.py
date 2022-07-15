@@ -102,7 +102,7 @@ def train_model(model, trn_x, trn_y, learning_rate, batch_size, epoch, print_per
 
         if (e+1) % print_per == 0:
             loss_trn, acc_trn = get_acc_loss(trn_x, trn_y, model, dataset_name, weight_decay)
-            print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f" %(e+1, acc_trn, loss_trn))
+            write_log("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f" %(e+1, acc_trn, loss_trn))
             model.train()
         
     # Freeze model
@@ -171,7 +171,7 @@ def train_scaffold_mdl(model, model_func, state_params_diff, trn_x, trn_y, learn
                     # Add L2 loss to complete f_i
                     params = get_mdl_params([model], n_par)
                     step_loss += (weight_decay)/2 * np.sum(params * params)
-                print("Step %3d, Training Loss: %.4f" %(count_step, step_loss))
+                write_log("Step %3d, Training Loss: %.4f" %(count_step, step_loss))
                 step_loss = 0; n_data_step = 0
                 model.train()
     
@@ -231,7 +231,7 @@ def train_feddyn_mdl(model, model_func, alpha_coef, avg_mdl_param, local_grad_ve
                 # Add L2 loss to complete f_i
                 params = get_mdl_params([model], n_par)
                 epoch_loss += (alpha_coef+weight_decay)/2 * np.sum(params * params)
-            print("Epoch %3d, Training Loss: %.4f" %(e+1, epoch_loss))
+            write_log("Epoch %3d, Training Loss: %.4f" %(e+1, epoch_loss))
             model.train()
     
     # Freeze model
@@ -293,7 +293,7 @@ def train_fedprox_mdl(model, avg_model_param_, mu, trn_x, trn_y, learning_rate, 
                 params = get_mdl_params([model], n_par)
                 epoch_loss += weight_decay/2 * np.sum(params * params)
             
-            print("Epoch %3d, Training Loss: %.4f" %(e+1, epoch_loss))
+            write_log("Epoch %3d, Training Loss: %.4f" %(e+1, epoch_loss))
             model.train()
     
     # Freeze model
