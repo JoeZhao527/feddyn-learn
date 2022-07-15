@@ -1,6 +1,6 @@
 from utils_general import *
 from utils_methods import *
-
+import traceback
 # Dataset initialization
 
 ########
@@ -126,6 +126,6 @@ try:
     plt.savefig('Output/%s/plot.pdf' %data_obj.name, dpi=1000, bbox_inches='tight')
     # plt.show() 
 except Exception:
-    pass
+    print(traceback.format_exc())
 finally:
     sys.stdout = original_stdout
