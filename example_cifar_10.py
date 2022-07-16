@@ -1,6 +1,12 @@
+import argparse
+parser = argparse.ArgumentParser()
+parser.add_argument('log_file_name')
+args = parser.parse_args()
+log_file_name = args.log_file_name
+from utils import write_log
+
 from utils_general import *
 from utils_methods import *
-from utils import write_log
 # Dataset initialization
 
 ########

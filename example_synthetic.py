@@ -1,6 +1,8 @@
 from utils_general import *
 from utils_methods import *
 
+
+
 # Dataset initialization
 ###
 [alpha, beta, theta, iid_sol, iid_data, name_prefix] = [0.0, 0.0, 0.0, True , True , 'syn_alpha-1_beta-1_theta0']
@@ -50,41 +52,41 @@ alpha_coef = 1e-2
                                      model_func=model_func, init_model=init_model, alpha_coef=alpha_coef,
                                      save_period=save_period, lr_decay_per_round=lr_decay_per_round)
 
-###
-print('SCAFFOLD')
-n_data_per_client = np.concatenate(data_obj.clnt_x, axis=0).shape[0] / n_clnt
-n_iter_per_epoch  = np.ceil(n_data_per_client/batch_size)
-n_minibatch = (epoch*n_iter_per_epoch).astype(np.int64)
-print_per_ = print_per*n_iter_per_epoch
+# ###
+# print('SCAFFOLD')
+# n_data_per_client = np.concatenate(data_obj.clnt_x, axis=0).shape[0] / n_clnt
+# n_iter_per_epoch  = np.ceil(n_data_per_client/batch_size)
+# n_minibatch = (epoch*n_iter_per_epoch).astype(np.int64)
+# print_per_ = print_per*n_iter_per_epoch
 
-[fed_mdls_sel_SCAFFOLD, trn_perf_sel_SCAFFOLD, tst_perf_sel_SCAFFOLD,
- fed_mdls_all_SCAFFOLD, trn_perf_all_SCAFFOLD,
- tst_perf_all_SCAFFOLD] = train_SCAFFOLD(data_obj=data_obj, act_prob=act_prob, learning_rate=learning_rate,
-                                         batch_size=batch_size, n_minibatch=n_minibatch, com_amount=com_amount,
-                                         print_per=print_per_, weight_decay=weight_decay, model_func=model_func,
-                                         init_model=init_model, save_period=save_period, lr_decay_per_round=lr_decay_per_round)
+# [fed_mdls_sel_SCAFFOLD, trn_perf_sel_SCAFFOLD, tst_perf_sel_SCAFFOLD,
+#  fed_mdls_all_SCAFFOLD, trn_perf_all_SCAFFOLD,
+#  tst_perf_all_SCAFFOLD] = train_SCAFFOLD(data_obj=data_obj, act_prob=act_prob, learning_rate=learning_rate,
+#                                          batch_size=batch_size, n_minibatch=n_minibatch, com_amount=com_amount,
+#                                          print_per=print_per_, weight_decay=weight_decay, model_func=model_func,
+#                                          init_model=init_model, save_period=save_period, lr_decay_per_round=lr_decay_per_round)
     
-####
-print('FedAvg')
+# ####
+# print('FedAvg')
 
-[fed_mdls_sel_FedAvg, trn_perf_sel_FedAvg, tst_perf_sel_FedAvg,
- fed_mdls_all_FedAvg, trn_perf_all_FedAvg,
- tst_perf_all_FedAvg] = train_FedAvg(data_obj=data_obj, act_prob=act_prob, learning_rate=learning_rate, batch_size=batch_size,
-                                     epoch=epoch, com_amount=com_amount, print_per=print_per, weight_decay=weight_decay,
-                                     model_func=model_func, init_model=init_model, save_period=save_period,
-                                     lr_decay_per_round=lr_decay_per_round)
+# [fed_mdls_sel_FedAvg, trn_perf_sel_FedAvg, tst_perf_sel_FedAvg,
+#  fed_mdls_all_FedAvg, trn_perf_all_FedAvg,
+#  tst_perf_all_FedAvg] = train_FedAvg(data_obj=data_obj, act_prob=act_prob, learning_rate=learning_rate, batch_size=batch_size,
+#                                      epoch=epoch, com_amount=com_amount, print_per=print_per, weight_decay=weight_decay,
+#                                      model_func=model_func, init_model=init_model, save_period=save_period,
+#                                      lr_decay_per_round=lr_decay_per_round)
         
-#### 
-print('FedProx')
+# #### 
+# print('FedProx')
 
-mu = 1e-4
+# mu = 1e-4
 
-[fed_mdls_sel_FedProx, trn_perf_sel_FedProx, tst_perf_sel_FedProx,
- fed_mdls_all_FedProx, trn_perf_all_FedProx,
- tst_perf_all_FedProx] = train_FedProx(data_obj=data_obj, act_prob=act_prob, learning_rate=learning_rate, batch_size=batch_size,
-                                     epoch=epoch, com_amount=com_amount, print_per=print_per, weight_decay=weight_decay,
-                                     model_func=model_func, init_model=init_model, save_period=save_period,
-                                     mu=mu, lr_decay_per_round=lr_decay_per_round)
+# [fed_mdls_sel_FedProx, trn_perf_sel_FedProx, tst_perf_sel_FedProx,
+#  fed_mdls_all_FedProx, trn_perf_all_FedProx,
+#  tst_perf_all_FedProx] = train_FedProx(data_obj=data_obj, act_prob=act_prob, learning_rate=learning_rate, batch_size=batch_size,
+#                                      epoch=epoch, com_amount=com_amount, print_per=print_per, weight_decay=weight_decay,
+#                                      model_func=model_func, init_model=init_model, save_period=save_period,
+#                                      mu=mu, lr_decay_per_round=lr_decay_per_round)
 
 
 # Plot results
