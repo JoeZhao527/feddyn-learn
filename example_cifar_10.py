@@ -1,8 +1,13 @@
 import argparse
+import os
 parser = argparse.ArgumentParser()
 parser.add_argument('log_file_name')
 args = parser.parse_args()
-log_file_name = args.log_file_name
+if not args.log_file_name:
+    raise Exception('log file name needed.')
+
+os.environ['LOG_FILE_NAME'] = args.log_file_name
+
 from utils import write_log
 
 from utils_general import *
